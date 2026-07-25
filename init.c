@@ -13,3 +13,22 @@ int init_data(t_cub3d *data)
         return (1);
     return (0);
 }
+
+void    init_player(t_cub3d *data, char map[5][5])
+{
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 0; j < 5; j++)
+        {
+            if (is_player_direction(map[i][j]))
+            {
+                data->player.x = i;
+                data->player.y = j;
+                data->player.direction = map[i][j];
+                data->player.radius = RADIUS;
+                return ;
+            }
+        }
+    }
+}
+

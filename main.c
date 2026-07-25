@@ -1,19 +1,20 @@
 #include "cub3d.h"
 
 void    map_render(t_cub3d *data, char map[5][5]);
-void    init_player(t_cub3d *data, char map[5][5]);
+void    check_hook(t_cub3d *data);
+void	my_keyhook(mlx_key_data_t keydata, void *param);
 
-int main(void)
-{
-    t_cub3d data;
-
-    char map[5][5] = {
+char map[5][5] = {
         {'1', '1', '1', '1', '1'},
         {'1', '0', '0', '0', '1'},
         {'1', '0', 'N', '0', '1'},
         {'1', '0', '0', '0', '1'},
         {'1', '1', '1', '1', '1'}
     };
+
+int main(void)
+{
+    t_cub3d data;
 
     init_data(&data);
 
@@ -25,33 +26,24 @@ int main(void)
     printf("Player Position: x=%i, y=%i\n", data.player.x, data.player.y);
     // End Debug
 
-    //mlx_loop(data.mlx);
+    check_hook(&data);
+    mlx_loop(data.mlx);
 
     return (EXIT_SUCCESS);
 }
 
-int     is_player_direction(char c)
+void    check_hook(t_cub3d *data)
 {
-    if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
-        return (1);
-    return (0);
+    mlx_key_hook(data->mlx, &my_keyhook, data);
 }
 
-void    init_player(t_cub3d *data, char map[5][5])
+void	my_keyhook(mlx_key_data_t keydata, void *param)
 {
-    for (int i = 0; i < 5; i++)
-    {
-        for (int j = 0; j < 5; j++)
-        {
-            if (is_player_direction(map[i][j]))
-            {
-                data->player.x = i;
-                data->player.y = j;
-                data->player.direction = map[i][j];
-                return ;
-            }
-        }
-    }
+    t_cub3d *data;
+
+    data = (t_cub3d *)param;
+	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
+		mlx_close_window(data->mlx);
 }
 
 void    map_render(t_cub3d *data, char map[5][5])
