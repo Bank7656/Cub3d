@@ -5,7 +5,8 @@ LIBMLX := ./MLX42
 
 HEADERS := -I ./ -I ./libft -I $(LIBMLX)/include/MLX42
 LIBS    := $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm 
-MANDATORY_SRCS     := main.c
+MANDATORY_SRCS     := main.c \
+					  init.c
 MANDATORY_OBJS_DIR := ./objects/
 MANDATORY_SRCS_OBJS:= ${MANDATORY_SRCS:.c=.o}
 MANDATORY_OBJS     := $(addprefix $(MANDATORY_OBJS_DIR), $(MANDATORY_SRCS_OBJS))
