@@ -4,6 +4,10 @@ static char *g_map[] = {
     "111111",
     "100101",
     "101001",
+    "101001",
+    "101001",
+    "101001",
+    "100001",
     "1100N1",
     "111111",
     NULL
@@ -31,7 +35,7 @@ int main(void)
     // Init constant 
     g.map = dup_map(g_map);
     g.map_width = 6;
-    g.map_height = 5;
+    g.map_height = 9;
     g.ceiling = 0x87CEEBFF;
     g.floor = 0x5A4632FF;
     //
@@ -78,8 +82,8 @@ static void handle_input(t_game *g)
     double  speed;
     double  rot;
 
-    speed = 0.05;
-    rot = 0.03;
+    speed = 3 * g->mlx->delta_time;
+    rot = 2 * g->mlx->delta_time;
     if (mlx_is_key_down(g->mlx, MLX_KEY_W))
         try_move(g, g->player.dir.x * speed, g->player.dir.y * speed);
     if (mlx_is_key_down(g->mlx, MLX_KEY_S))
