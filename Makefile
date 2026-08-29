@@ -1,48 +1,79 @@
-NAME := cub3d 
-CFLAGS :=
-# CFLAGS := -Wall -Wextra -Werror -Wunreachable-code -Ofast -O3
-LIBMLX := ./MLX42
+NAME = cub3d 
 
-HEADERS := -I ./ -I ./libft -I $(LIBMLX)/include/MLX42
-LIBS    := $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm 
+CC = cc
+CFLAGS := -g
+RM = rm -f
+
+# CFLAGS := -Wall -Wextra -Werror -Wunreachable-code -Ofast -O3
+MLX_DIR = MLX42
+MLX_LIB = $(MLX_DIR)/build/libmlx42.a
+MLX_INC = -I$(MLX_DIR)/include
+
+HEADERS := cub3d.h
 MANDATORY_SRCS     := main.c \
 					  init.c \
+					  draw.c \
 					  utils.c
+
 MANDATORY_OBJS_DIR := ./objects/
 MANDATORY_SRCS_OBJS:= ${MANDATORY_SRCS:.c=.o}
 MANDATORY_OBJS     := $(addprefix $(MANDATORY_OBJS_DIR), $(MANDATORY_SRCS_OBJS))
 
+INC_DIR = ./
+
 # Libft
 LIBFT_NAME = libft.a
-LIBFT_DIR := ./libft/
-LIBFT = $(addprefix $(LIBFT_DIR), $(LIBFT_NAME))
+LIBFT_DIR = ./libft
+LIBFT_INC := -I$(LIBFT_DIR)
+LIBFT = $(LIBFT_DIR)/$(LIBFT_NAME)
+
+INCLUDES	= -I$(INC_DIR) $(MLX_INC) $(LIBFT_INC)
+
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S), Linux)
+	MLX_FLAGS = -ldl -lglfw -pthread -lm
+endif
+
+ifeq ($(UNAME_S), Darwin)
+	GLFW_PATH = $(shell brew --prefix glfw)
+	MLX_FLAGS = -lglfw -L$(GLFW_PATH)/lib \
+                -framework Cocoa -framework OpenGL -framework IOKit
+endif
 
 all: $(NAME)
 
 bonus: all
 
-$(NAME): $(MANDATORY_OBJS_DIR) $(MANDATORY_OBJS)
-	@cmake $(LIBMLX) -B $(LIBMLX)/build && make -C $(LIBMLX)/build -j4
-	@$(MAKE) -C $(LIBFT_DIR)
-	$(CC) $(CFLAGS) $(MANDATORY_OBJS) $(LIBS) $(LIBFT) $(HEADERS) -o $(NAME)
+$(NAME): $(MANDATORY_OBJS_DIR) $(MANDATORY_OBJS) $(LIBFT) $(MLX_LIB)
+	$(CC) $(CFLAGS) $(MANDATORY_OBJS) $(LIBFT) $(MLX_LIB) $(MLX_FLAGS) -o $(NAME)
 
-$(MANDATORY_OBJS_DIR)%.o: %.c
-	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) && printf "Compiling: $(notdir $<)\n"
+$(MANDATORY_OBJS_DIR)%.o: %.c $(HEADERS) | $(MANDATORY_OBJS_DIR)
+	@$(CC) $(CFLAGS) $(INCLUDES) -o $@ -c $< 
 
 $(MANDATORY_OBJS_DIR):
 	@mkdir -p $(MANDATORY_OBJS_DIR)
 
+$(MLX_LIB):
+	@cmake -B $(MLX_DIR)/build -S $(MLX_DIR)
+	@cmake --build $(MLX_DIR)/build -j4
+
+$(LIBFT):
+	@$(MAKE) -C $(LIBFT_DIR)
+
 clean:
-	@rm -rf $(MANDATORY_OBJS_DIR)
-	@$(MAKE) clean -C $(LIBFT_DIR)
+	$(RM) -r $(MANDATORY_OBJS_DIR)
+	@$(MAKE) -C $(LIBFT_DIR) clean
 
-fclean:
-	@rm -rf $(MANDATORY_OBJS_DIR)
-	@$(MAKE) fclean -C $(LIBFT_DIR)
-	@rm -rf $(LIBMLX)/build
-	@rm -rf $(NAME)
+fclean: clean
+	$(RM) -r $(MANDATORY_OBJS_DIR)
+	@$(MAKE) -C $(LIBFT_DIR) fclean
+	$(RM) -r $(NAME)
 
-re: clean all
+fclean_all: fclean
+	$(RM) -r $(MLX_DIR)/build
 
-.PHONY: all, clean, fclean, re
+re: fclean all
+
+.PHONY: all clean fclean fclean_all re
 
