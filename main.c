@@ -17,6 +17,7 @@ static void handle_input(t_game *g);
 static void try_move(t_game *g, double dx, double dy);
 static double margin(double d, double m);
 static int is_walkable(t_game *g, double x, double y);
+static void rotate(t_player *p, double angle);
 
 
 static void run_dda(t_game *g, t_ray *r);
@@ -78,7 +79,7 @@ static void handle_input(t_game *g)
     double  rot;
 
     speed = 0.05;
-    rot = 2;
+    rot = 0.03;
     if (mlx_is_key_down(g->mlx, MLX_KEY_W))
         try_move(g, g->player.dir.x * speed, g->player.dir.y * speed);
     if (mlx_is_key_down(g->mlx, MLX_KEY_S))
@@ -87,7 +88,23 @@ static void handle_input(t_game *g)
         try_move(g, -g->player.plane.x * speed, -g->player.plane.y * speed);
     if (mlx_is_key_down(g->mlx, MLX_KEY_D))
         try_move(g, g->player.plane.x * speed, g->player.plane.y * speed);
+    if (mlx_is_key_down(g->mlx, MLX_KEY_LEFT))
+        rotate(&g->player, -rot);
+    if (mlx_is_key_down(g->mlx, MLX_KEY_RIGHT))
+        rotate(&g->player, rot);
+}
 
+static void rotate(t_player *p, double angle)
+{
+    double  old_dir_x;
+    double  old_plane_x;
+
+    old_dir_x = p->dir.x;
+    old_plane_x = p->plane.x;
+    p->dir.x = p->dir.x * cos(angle) - p->dir.y * sin(angle);
+    p->dir.y = old_dir_x * sin(angle) + p->dir.y * cos(angle);
+    p->plane.x = p->plane.x * cos(angle) - p->plane.y * sin(angle);
+    p->plane.y = old_plane_x * sin(angle) + p->plane.y * cos(angle);
 }
 
 static void try_move(t_game *g, double dx, double dy)
