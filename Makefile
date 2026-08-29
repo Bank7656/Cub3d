@@ -13,6 +13,9 @@ HEADERS := cub3d.h
 MANDATORY_SRCS     := main.c \
 					  init.c \
 					  draw.c \
+					  frame.c \
+					  moves.c \
+					  keyhooks.c \
 					  utils.c
 
 MANDATORY_OBJS_DIR := ./objects/

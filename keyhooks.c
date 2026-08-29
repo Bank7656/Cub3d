@@ -1,48 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   keyhooks.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/29 18:36:51 by thacharo          #+#    #+#             */
-/*   Updated: 2026/08/29 18:37:39 by thacharo         ###   ########.fr       */
+/*   Created: 2026/08/29 18:31:39 by thacharo          #+#    #+#             */
+/*   Updated: 2026/08/29 18:40:58 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-char	**dup_map(char **src)
+void	on_key(mlx_key_data_t key, void *param)
 {
-	int		i;
-	char	**dst;
-
-	i = 0;
-	while (src[i])
-		i++;
-	dst = ft_calloc(i + 1, sizeof(char *));
-	if (!dst)
-		return (NULL);
-	i = 0;
-	while (src[i])
-	{
-		dst[i] = ft_strdup(src[i]);
-		if (!dst[i])
-			return (free_map(dst), NULL);
-		i++;
-	}
-	return (dst);
-}
-
-void	free_map(char **arr)
-{
-	int	i;
-
-	i = 0;
-	while (arr[i])
-	{
-		free(arr);
-		i++;
-	}
-	free(arr);
+	if (key.key == MLX_KEY_ESCAPE && key.action == MLX_PRESS)
+		mlx_close_window(((t_game *)param)->mlx);
 }

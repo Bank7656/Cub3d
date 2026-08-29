@@ -61,13 +61,17 @@ typedef struct s_game {
 } t_game;
 
 
-int init_player(t_game *g);
-int is_player_direction(char c);
+int     init_player(t_game *g);
 void    init_ray(t_game *g, t_ray *r, int x);
 
 
 void draw_background(t_game *g);
 void draw_column(t_game *g, t_ray *r, int x);
+
+void frame(void *param);
+void handle_input(t_game *g);
+
+void on_key(mlx_key_data_t key, void *param);
 
 
 char    **dup_map(char **src);
