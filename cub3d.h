@@ -1,6 +1,7 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
+# include <fcntl.h>
 # include <stdio.h>
 # include <math.h>
 
@@ -76,6 +77,9 @@ void on_key(mlx_key_data_t key, void *param);
 
 char    **dup_map(char **src);
 void    free_map(char **arr);
+int     free_arr(char **arr, int n);
 
+
+char **read_file(int fd);
 
 #endif

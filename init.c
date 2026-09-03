@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 18:41:13 by thacharo          #+#    #+#             */
-/*   Updated: 2026/08/29 18:42:00 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/08/29 20:27:05 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,7 @@ static void	set_step_and_side(t_game *g, t_ray *r)
 static int	is_player_direction(char c)
 {
 	if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
-	{
 		return (1);
-	}
 	return (0);
 }
 

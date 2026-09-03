@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 18:36:51 by thacharo          #+#    #+#             */
-/*   Updated: 2026/08/29 18:37:39 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/08/30 17:19:08 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,18 @@ void	free_map(char **arr)
 		i++;
 	}
 	free(arr);
+}
+
+int	free_arr(char **arr, int n)
+{
+	int	i;
+
+	i = 0;
+	while (i < n)
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+	return (0);
 }
