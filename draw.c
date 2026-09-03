@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 18:42:38 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/03 21:55:26 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/03 23:53:19 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ void	draw_background(t_game *g)
 		while (x < WIDTH)
 		{
 			if (y < HEIGHT / 2)
-				mlx_put_pixel(g->img, x, y, g->ceiling);
+				mlx_put_pixel(g->img, x, y, g->scene.ceiling);
 			else
-				mlx_put_pixel(g->img, x, y, g->floor);
+				mlx_put_pixel(g->img, x, y, g->scene.floor);
 			x++;
 		}
 		y++;

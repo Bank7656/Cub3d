@@ -23,47 +23,63 @@
 
 # define RADIUS 3
 
+typedef enum e_side
+{
+	NORTH,
+	SOUTH,
+	EAST,
+	WEST
+}   t_side;
+
 typedef struct s_vec {
-    double     x;
-    double     y;
+	double     x;
+	double     y;
 } t_vec;
 
 typedef struct s_player {
-    t_vec   pos;
-    t_vec   dir;
-    t_vec   plane;
+	t_vec   pos;
+	t_vec   dir;
+	t_vec   plane;
 } t_player;
 
+typedef struct s_scene {
+	mlx_texture_t   *texture[4];
+	uint32_t        floor;
+	uint32_t        ceiling;
+} t_scene;
+
 typedef struct s_ray {
-    t_vec   dir;            /* this column's ray direction     */
-    t_vec   delta_dist;     /* ray length per grid line        */
-    t_vec   side_dist;      /* ray length to next grid line    */
-    int     map_x;
-    int     map_y;
-    int     step_x;
-    int     step_y;
-    int     side;           /* 0 = vertical face, 1 = horizontal */
-    int     hit;
-    double  perp_wall_dist;
-    int     line_height;
-    int     draw_start;
-    int     draw_end;
+	t_vec   dir;            /* this column's ray direction     */
+	t_vec   delta_dist;     /* ray length per grid line        */
+	t_vec   side_dist;      /* ray length to next grid line    */
+	int     map_x;
+	int     map_y;
+	int     step_x;
+	int     step_y;
+	int     side;           /* 0 = vertical face, 1 = horizontal */
+	int     hit;
+	double  perp_wall_dist;
+	int     line_height;
+	int     draw_start;
+	int     draw_end;
 }   t_ray;
 
 typedef struct s_game {
-    mlx_t       *mlx;
-    mlx_image_t *img;
-    char        **map;
-    int         map_width;
-    int         map_height;
-    t_player    player;
-    uint32_t    floor;
-    uint32_t    ceiling;
+	mlx_t       *mlx;
+	mlx_image_t *img;
+	char        **map;
+	int         map_width;
+	int         map_height;
+	t_player    player;
+	t_scene		scene;
 } t_game;
 
 
 int     init_player(t_game *g);
 void    init_ray(t_game *g, t_ray *r, int x);
+
+
+int set_colour(t_game *game, char *line, uint32_t *scene);
 
 
 void draw_background(t_game *g);

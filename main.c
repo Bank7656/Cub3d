@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 18:39:21 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/03 22:27:02 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/03 23:52:36 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,107 +41,7 @@ int set_texture(t_game *g, char *line)
 {
 	(void)g;
 	(void)line;
-	return (1);
-}
 
-// int set_colour(t_game *game, char *line, uint32_t *scene)
-// {
-// 	(void)game;
-// 	uint32_t	hex;
-// 	char		**colour;
-// 	int			rgb[3];
-
-	
-
-// 	colour = ft_split(line, ',');
-// 	if (!colour)
-// 		return (0);
-// 	int	i = 0;
-// 	while (colour[i] != NULL)
-// 		i++;
-
-		
-// 	if (i != 3)
-// 	{
-// 		while (i >= 0)
-// 		{
-// 			free(colour[i]);
-// 			i--;
-// 		}
-// 		free(colour);
-// 		printf("Test\n");
-// 		return (0);
-// 	}
-
-// 	rgb[0] = ft_atoi(colour[0]);
-// 	rgb[1] = ft_atoi(colour[1]);
-// 	rgb[2] = ft_atoi(colour[2]);
-// 	*scene = (rgb[0] << 24) | (rgb[1] << 16) | (rgb[2] << 8) | 0xFF;
-// 	return (1);
-// }
-int	count_comma(char *line)
-{
-	int i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (line[i] != '\0')
-	{
-		if (line[i] == ',')
-			count++; 
-		i++;
-	}
-	return (count);
-}
-
-int	parse_component(char **line, int *output)
-{
-	int	i;
-	int	value;
-
-	value = 0;
-	while (**line == ' ' || **line == '\t')
-		(*line)++;
-	if (!ft_isdigit(**line))
-		return (0);
-	while (ft_isdigit(**line))
-	{
-		value = value * 10 + (**line - '0');
-		if (value > 255)
-			return (1);
-		(*line)++;
-	}
-	*output = value;
-	return (1);
-}
-
-
-int set_colour(t_game *game, char *line, uint32_t *scene)
-{
-	int	i;
-	int	rgb[3];
-
-	if (count_comma(line) != 2)
-		return (0);
-	i = 0;
-	while (i < 3)
-	{
-		if (!parse_component(&line, &rgb[i]))
-			return (1);
-		while (*line == ' ' || *line == '\t')
-			line++;
-		if (i < 2)
-		{
-			if (*line != ',')
-				return (0);
-			line++;
-		}
-		i++;
-	}
-	if (*line != '\0')
-		return (0);
-	*scene = (rgb[0] << 24) | (rgb[1] << 16) | (rgb[2] << 8) | 0xFF;
 	return (1);
 }
 
@@ -158,9 +58,9 @@ int	parse_line(t_game *g, char *line)
 	if (match_id(line, "WE"))
 		return (set_texture(g, line + 2));
 	if (match_id(line, "F"))
-		return (set_colour(g, line + 1, &g->floor));
+		return (set_colour(g, line + 1, &g->scene.floor));
 	if (match_id(line, "C"))
-		return (set_colour(g, line + 1, &g->ceiling));
+		return (set_colour(g, line + 1, &g->scene.ceiling));
 	return (0);
 }
 
@@ -175,8 +75,6 @@ int	main(int argc, char **argv)
 	g.map = dup_map(g_map);
 	g.map_width = 6;
 	g.map_height = 9;
-	g.ceiling = 0x87CEEBFF;
-	g.floor = 0x5A4632FF;
 	//
 
 	int fd = open(argv[1], O_RDONLY);
@@ -201,14 +99,14 @@ int	main(int argc, char **argv)
 			i++;
 			continue;		
 		}
-		parse_line(&g, lines[i]);
-		// if (!parse_line(&g, lines[i]))
-		// {
-		// 	printf("[%s]\n", lines[i]);
-		// 	printf("Error\n");
-		// 	// Need to free lines (**)
-		// 	return (EXIT_FAILURE);
-		// }
+		// parse_line(&g, lines[i]);
+		if (!parse_line(&g, lines[i]))
+		{
+			printf("[%s]\n", lines[i]);
+			printf("Error\n");
+			// Need to free lines (**)
+			return (EXIT_FAILURE);
+		}
 		printf("%s\n", lines[i]);
 		i++;
 	}
