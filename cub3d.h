@@ -3,6 +3,8 @@
 
 # include <fcntl.h>
 # include <stdio.h>
+# include <string.h>
+# include <errno.h>
 # include <math.h>
 
 # include "libft/libft.h"
@@ -97,5 +99,11 @@ int     free_arr(char **arr, int n);
 
 
 char **read_file(int fd);
+
+
+int	parse_line(t_game *g, char *line);
+int set_texture(t_game *g, char *path, int side);
+
+void	error_exit(t_game *g, const char *msg);
 
 #endif

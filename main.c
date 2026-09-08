@@ -6,11 +6,14 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 18:39:21 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/03 23:52:36 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/08 22:50:33 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	clear_game(t_game *g);
+void	clear_map(char **map);
 
 static char *g_map[] = {
 	"111111",
@@ -25,43 +28,14 @@ static char *g_map[] = {
 	NULL
 };
 
-int		match_id(char *line, char *id)
+int	is_valid_filename(char *name)
 {
 	int	len;
 
-	len = ft_strlen(id);
-	if (ft_strncmp(line, id, len) != 0)
+	len = ft_strlen(name);
+	if (len <= 4 || ft_strncmp(name + len - 4, ".cub", 4) != 0)
 		return (0);
-    if (line[len] != ' ' && line[len] != '\t')
-        return (0);
-    return (1);
-}
-
-int set_texture(t_game *g, char *line)
-{
-	(void)g;
-	(void)line;
-
 	return (1);
-}
-
-int	parse_line(t_game *g, char *line)
-{
-	while (*line == ' ' || *line == '\t')
-		line++;
-	if (match_id(line, "NO"))
-		return (set_texture(g, line + 2));
-	if (match_id(line, "SO"))
-		return (set_texture(g, line + 2));
-	if (match_id(line, "EA"))
-		return (set_texture(g, line + 2));
-	if (match_id(line, "WE"))
-		return (set_texture(g, line + 2));
-	if (match_id(line, "F"))
-		return (set_colour(g, line + 1, &g->scene.floor));
-	if (match_id(line, "C"))
-		return (set_colour(g, line + 1, &g->scene.ceiling));
-	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -69,27 +43,20 @@ int	main(int argc, char **argv)
 	t_game	g;
 
 	if (argc != 2)
+	{
+		printf("Usage: ./cub3d filename.cub\n");
 		return (EXIT_FAILURE);
+	}
 
-	// Init constant
-	g.map = dup_map(g_map);
-	g.map_width = 6;
-	g.map_height = 9;
-	//
-
+	ft_bzero(&g, sizeof(t_game));
+	if (!is_valid_filename(argv[1]))
+		error_exit(&g, "Need to use .cub file");
 	int fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
-	{
-		printf("Error\n");
-		return (EXIT_FAILURE);
-	}
+		error_exit(&g, "Cannot open .cub file");
 	char **lines = read_file(fd);
 	if (!lines)
-	{
-		printf("Error\n");
-		return (EXIT_FAILURE);
-	}
-
+		error_exit(&g, strerror(errno));
 	
 	int i = 0;
 	while (lines[i] != NULL)
@@ -103,17 +70,25 @@ int	main(int argc, char **argv)
 		if (!parse_line(&g, lines[i]))
 		{
 			printf("[%s]\n", lines[i]);
-			printf("Error\n");
+			printf("Error: %s\n", mlx_strerror(mlx_errno));
 			// Need to free lines (**)
 			return (EXIT_FAILURE);
 		}
 		printf("%s\n", lines[i]);
 		i++;
+		if (i == 7)
+			break;
 	}
-
+	
+	// Init constant
+	g.map = dup_map(g_map);
+	g.map_width = 6;
+	g.map_height = 9;
+	//
 
 	if (!init_player(&g))
 	{
+		printf("Test\n");
 		printf("Error\n");
 		return (EXIT_FAILURE);
 	}
@@ -129,4 +104,13 @@ int	main(int argc, char **argv)
 	mlx_terminate(g.mlx);
 	close(fd);
 	return (EXIT_SUCCESS);
+}
+
+void	error_exit(t_game *g, const char *msg)
+{
+	write(2, "Error\n", 6);
+	write(2, msg, ft_strlen(msg));
+	write(2, "\n", 1);
+	clear_game(g);
+	exit(EXIT_FAILURE);
 }

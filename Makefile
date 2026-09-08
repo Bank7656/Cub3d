@@ -11,13 +11,16 @@ MLX_INC = -I$(MLX_DIR)/include
 
 HEADERS := cub3d.h
 MANDATORY_SRCS     := main.c \
-					  parse_file.c \
+					  open_file.c \
 					  colour.c \
 					  init.c \
+					  parse.c \
+					  set_texture.c \
 					  draw.c \
 					  frame.c \
 					  moves.c \
 					  keyhooks.c \
+					  clear.c \
 					  utils.c
 
 MANDATORY_OBJS_DIR := ./objects/
