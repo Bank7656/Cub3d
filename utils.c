@@ -6,11 +6,28 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 18:36:51 by thacharo          #+#    #+#             */
-/*   Updated: 2026/08/30 17:19:08 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/08 23:20:09 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+int	ft_isspace(int c)
+{
+	if (c == ' ')
+		return (1);
+	else if (c == '\f')
+		return (1);
+	else if (c == '\n')
+		return (1);
+	else if (c == '\r')
+		return (1);
+	else if (c == '\t')
+		return (1);
+	else if (c == '\v')
+		return (1);
+	return (0);
+}
 
 char	**dup_map(char **src)
 {

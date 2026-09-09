@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/08 13:31:48 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/08 22:47:08 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/09 12:07:09 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,17 @@ int	parse_line(t_game *g, char *line)
 	while (*line == ' ' || *line == '\t')
 		line++;
 	if (match_id(line, "NO"))
-		return (set_texture(g, line + 2, NORTH));
-	if (match_id(line, "SO"))
-		return (set_texture(g, line + 2, SOUTH));
-	if (match_id(line, "EA"))
-		return (set_texture(g, line + 2, EAST));
-	if (match_id(line, "WE"))
-		return (set_texture(g, line + 2, WEST));
-	if (match_id(line, "F"))
-		return (set_colour(g, line + 1, &g->scene.floor));
-	if (match_id(line, "C"))
-		return (set_colour(g, line + 1, &g->scene.ceiling));
+		set_texture(g, line + 2, NORTH);
+	else if (match_id(line, "SO"))
+		set_texture(g, line + 2, SOUTH);
+	else if (match_id(line, "EA"))
+		set_texture(g, line + 2, EAST);
+	else if (match_id(line, "WE"))
+		set_texture(g, line + 2, WEST);
+	else if (match_id(line, "F"))
+		set_colour(g, line + 1, &g->scene.floor);
+	else if (match_id(line, "C"))
+		set_colour(g, line + 1, &g->scene.ceiling);
 	return (0);
 }
 
@@ -40,7 +40,7 @@ static int	match_id(const char *line, const char *id)
 	len = ft_strlen(id);
 	if (ft_strncmp(line, id, len) != 0)
 		return (0);
-	if (line[len] != ' ' && line[len] != '\t')
+	if (!ft_isspace(line[len]))
 		return (0);
 	return (1);
 }

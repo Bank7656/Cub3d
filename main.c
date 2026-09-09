@@ -6,14 +6,11 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 18:39:21 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/08 22:50:33 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/09 12:06:28 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-void	clear_game(t_game *g);
-void	clear_map(char **map);
 
 static char *g_map[] = {
 	"111111",
@@ -66,13 +63,12 @@ int	main(int argc, char **argv)
 			i++;
 			continue;		
 		}
-		// parse_line(&g, lines[i]);
 		if (!parse_line(&g, lines[i]))
 		{
+			// Start Debug
 			printf("[%s]\n", lines[i]);
-			printf("Error: %s\n", mlx_strerror(mlx_errno));
-			// Need to free lines (**)
-			return (EXIT_FAILURE);
+			// End Debug
+			error_exit(&g, mlx_strerror(mlx_errno));
 		}
 		printf("%s\n", lines[i]);
 		i++;
@@ -94,7 +90,7 @@ int	main(int argc, char **argv)
 	}
 	g.mlx = mlx_init(WIDTH, HEIGHT, "cub3D", false);
 	if (!g.mlx)
-		return (puts(mlx_strerror(mlx_errno)), EXIT_FAILURE);
+		error_exit(&g, mlx_strerror(mlx_errno));
 	g.img = mlx_new_image(g.mlx, WIDTH, HEIGHT);
 	if (!g.img || mlx_image_to_window(g.mlx, g.img, 0, 0) == -1)
 		return (mlx_close_window(g.mlx), EXIT_FAILURE);

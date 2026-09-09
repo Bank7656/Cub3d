@@ -81,7 +81,7 @@ int     init_player(t_game *g);
 void    init_ray(t_game *g, t_ray *r, int x);
 
 
-int set_colour(t_game *game, char *line, uint32_t *scene);
+void	set_colour(t_game *g, char *line, uint32_t *scene);
 
 
 void draw_background(t_game *g);
@@ -93,6 +93,7 @@ void handle_input(t_game *g);
 void on_key(mlx_key_data_t key, void *param);
 
 
+int		ft_isspace(int c);
 char    **dup_map(char **src);
 void    free_map(char **arr);
 int     free_arr(char **arr, int n);
@@ -102,7 +103,9 @@ char **read_file(int fd);
 
 
 int	parse_line(t_game *g, char *line);
-int set_texture(t_game *g, char *path, int side);
+void	set_texture(t_game *g, char *path, int side);
+
+void	clear_game(t_game *g);
 
 void	error_exit(t_game *g, const char *msg);
 

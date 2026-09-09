@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 23:46:07 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/03 23:47:31 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/09 12:44:11 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,32 @@
 static int	count_comma(char *line);
 static int  parse_component(char **line, int *output);
 
-int set_colour(t_game *game, char *line, uint32_t *scene)
+void	set_colour(t_game *g, char *line, uint32_t *scene)
 {
 	int	i;
 	int	rgb[3];
 
 	if (count_comma(line) != 2)
-		return (0);
+		error_exit(g, "Value have to be r,g,b format");
 	i = 0;
 	while (i < 3)
 	{
 		if (!parse_component(&line, &rgb[i]))
-			return (1);
-		while (*line == ' ' || *line == '\t')
+			error_exit(g, "Colour have to be between 0-255");
+		while (ft_isspace(*line))
 			line++;
 		if (i < 2)
 		{
 			if (*line != ',')
-				return (0);
+				error_exit(g, "Value have to be r,g,b format");
 			line++;
 		}
 		i++;
 	}
 	if (*line != '\0')
-		return (0);
+		error_exit(g, "Value have to be r,g,b format");
 	*scene = (rgb[0] << 24) | (rgb[1] << 16) | (rgb[2] << 8) | 0xFF;
-	return (1);
+	return ;
 }
 
 static int	count_comma(char *line)
@@ -61,11 +61,10 @@ static int	count_comma(char *line)
 
 static int  parse_component(char **line, int *output)
 {
-	int	i;
 	int	value;
 
 	value = 0;
-	while (**line == ' ' || **line == '\t')
+	while (ft_isspace(**line))
 		(*line)++;
 	if (!ft_isdigit(**line))
 		return (0);
@@ -73,7 +72,7 @@ static int  parse_component(char **line, int *output)
 	{
 		value = value * 10 + (**line - '0');
 		if (value > 255)
-			return (1);
+			return (0);
 		(*line)++;
 	}
 	*output = value;
