@@ -102,7 +102,7 @@ int     free_arr(char **arr, int n);
 char **read_file(int fd);
 
 
-int	parse_line(t_game *g, char *line);
+void	parse_line(t_game *g, char *line);
 void	set_texture(t_game *g, char *path, int side);
 
 void	clear_game(t_game *g);

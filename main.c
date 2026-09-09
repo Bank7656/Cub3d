@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 18:39:21 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/09 12:06:28 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/09 14:10:27 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,22 @@ int	is_valid_filename(char *name)
 
 	len = ft_strlen(name);
 	if (len <= 4 || ft_strncmp(name + len - 4, ".cub", 4) != 0)
+		return (0);
+	return (1);
+}
+/* packed colour always has 0xFF alpha, so 0 means unset */
+int	is_all_values_parse(t_game *g)
+{
+	int	i;
+	
+	i = 0;
+	while (i < 4)
+	{
+		if (g->scene.texture[i] == NULL)
+			return (0);
+		i++;
+	}
+	if (g->scene.floor == 0 || g->scene.ceiling == 0)
 		return (0);
 	return (1);
 }
@@ -63,17 +79,11 @@ int	main(int argc, char **argv)
 			i++;
 			continue;		
 		}
-		if (!parse_line(&g, lines[i]))
-		{
-			// Start Debug
-			printf("[%s]\n", lines[i]);
-			// End Debug
-			error_exit(&g, mlx_strerror(mlx_errno));
-		}
+		if (is_all_values_parse(&g))
+			break;
+		parse_line(&g, lines[i]);
 		printf("%s\n", lines[i]);
 		i++;
-		if (i == 7)
-			break;
 	}
 	
 	// Init constant

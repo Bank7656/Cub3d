@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 23:46:07 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/09 12:44:11 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/09 14:09:20 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	set_colour(t_game *g, char *line, uint32_t *scene)
 	int	i;
 	int	rgb[3];
 
+	if (*scene != 0)
+		error_exit(g, "Colour already exists");
 	if (count_comma(line) != 2)
 		error_exit(g, "Value have to be r,g,b format");
 	i = 0;
@@ -40,7 +42,6 @@ void	set_colour(t_game *g, char *line, uint32_t *scene)
 	if (*line != '\0')
 		error_exit(g, "Value have to be r,g,b format");
 	*scene = (rgb[0] << 24) | (rgb[1] << 16) | (rgb[2] << 8) | 0xFF;
-	return ;
 }
 
 static int	count_comma(char *line)

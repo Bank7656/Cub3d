@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/08 13:31:48 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/09 12:07:09 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/09 13:32:04 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	match_id(const char *line, const char *id); 
 
-int	parse_line(t_game *g, char *line)
+void	parse_line(t_game *g, char *line)
 {
 	while (*line == ' ' || *line == '\t')
 		line++;
@@ -30,7 +30,6 @@ int	parse_line(t_game *g, char *line)
 		set_colour(g, line + 1, &g->scene.floor);
 	else if (match_id(line, "C"))
 		set_colour(g, line + 1, &g->scene.ceiling);
-	return (0);
 }
 
 static int	match_id(const char *line, const char *id)
