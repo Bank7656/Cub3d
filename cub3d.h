@@ -13,6 +13,8 @@
 # define EXIT_SUCCESS 0
 # define EXIT_FAILURE 1
 
+# define STDERR_FILENO 2
+
 # define FOV 60 * (M_PI / 180)
 
 # define TILE_SIZE 32

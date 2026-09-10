@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 18:39:21 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/09 14:10:27 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/10 16:13:57 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	is_valid_filename(char *name)
 		return (0);
 	return (1);
 }
+
 /* packed colour always has 0xFF alpha, so 0 means unset */
 int	is_all_values_parse(t_game *g)
 {
@@ -50,6 +51,46 @@ int	is_all_values_parse(t_game *g)
 		return (0);
 	return (1);
 }
+
+int	check_no_blank_lines(char **lines, int idx)
+{
+	while (lines[idx] != NULL)
+	{
+		if (lines[idx][0] == '\0')
+			return (0);
+		idx++;
+	}
+	return (1);
+}
+
+int	is_valid_map_character(char c)
+{
+	if (c == '0' || c == '1' || c == ' ')
+		return (1);
+	if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
+		return (1);
+	return (0);
+}
+
+int check_map_character(char **lines, int idx)
+{
+	int	i;
+
+	while (lines[idx] != NULL)
+	{
+		i = 0;
+		while (lines[idx][i] != '\0')
+		{
+			if (!is_valid_map_character(lines[idx][i]))
+				return (0);
+			i++;
+		}
+		idx++;
+	}
+	return (1);	
+}
+
+
 
 int	main(int argc, char **argv)
 {
@@ -72,6 +113,14 @@ int	main(int argc, char **argv)
 		error_exit(&g, strerror(errno));
 	
 	int i = 0;
+
+	while (lines[i] != NULL)
+	{
+		printf("[%s]\n", lines[i]);
+		i++;
+	}
+	
+	i = 0;
 	while (lines[i] != NULL)
 	{
 		if (lines[i][0] == '\0')
@@ -82,10 +131,15 @@ int	main(int argc, char **argv)
 		if (is_all_values_parse(&g))
 			break;
 		parse_line(&g, lines[i]);
-		printf("%s\n", lines[i]);
+
 		i++;
 	}
-	
+	int	map_start = i;
+	if (!check_no_blank_lines(lines, map_start))
+		error_exit(&g, "Map incomplete");
+	if (!check_map_character(lines, map_start))
+		error_exit(&g, "Invalid character");
+		
 	// Init constant
 	g.map = dup_map(g_map);
 	g.map_width = 6;
@@ -114,9 +168,9 @@ int	main(int argc, char **argv)
 
 void	error_exit(t_game *g, const char *msg)
 {
-	write(2, "Error\n", 6);
-	write(2, msg, ft_strlen(msg));
-	write(2, "\n", 1);
+	write(STDERR_FILENO, "Error\n", 6);
+	write(STDERR_FILENO, msg, ft_strlen(msg));
+	write(STDERR_FILENO, "\n", 1);
 	clear_game(g);
 	exit(EXIT_FAILURE);
 }
