@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 18:39:21 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/10 16:13:57 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/11 20:11:37 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,56 @@ int check_map_character(char **lines, int idx)
 }
 
 
+int	get_map_dimension(t_game *g, char **lines, int idx)
+{
+	int	len;
+	
+	g->map_width = 0;
+	g->map_height = 0;
+	while (lines[idx] != NULL)
+	{
+		len = ft_strlen(lines[idx]); 
+		if (len > g->map_width)
+			g->map_width = len;
+		g->map_height++;
+		idx++;
+	}
+	if (g->map_width == 0)
+		return (0);
+	return (1);
+}
+
+void	load_map(t_game *g, char **lines, int idx)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	g->map = (char **)ft_calloc(g->map_height + 1, sizeof(char *));
+	if (!g->map)
+		error_exit(g, "Cannot Malloc");
+	while (lines[idx] != NULL)
+	{
+		j = 0;
+		g->map[i] = (char *)ft_calloc(g->map_width + 1, sizeof(char));
+		if (!g->map[i])
+			error_exit(g, "Cannot Malloc");
+		while (lines[idx][j] != '\0')
+		{
+			g->map[i][j] = lines[idx][j];
+			j++;
+		}
+		ft_memset(g->map[i] + j, ' ', g->map_width - j);
+		i++;
+		idx++;
+	}
+	g->map[i] = NULL;
+}
 
 int	main(int argc, char **argv)
 {
 	t_game	g;
+	int		i;
 
 	if (argc != 2)
 	{
@@ -111,14 +157,6 @@ int	main(int argc, char **argv)
 	char **lines = read_file(fd);
 	if (!lines)
 		error_exit(&g, strerror(errno));
-	
-	int i = 0;
-
-	while (lines[i] != NULL)
-	{
-		printf("[%s]\n", lines[i]);
-		i++;
-	}
 	
 	i = 0;
 	while (lines[i] != NULL)
@@ -139,13 +177,9 @@ int	main(int argc, char **argv)
 		error_exit(&g, "Map incomplete");
 	if (!check_map_character(lines, map_start))
 		error_exit(&g, "Invalid character");
-		
-	// Init constant
-	g.map = dup_map(g_map);
-	g.map_width = 6;
-	g.map_height = 9;
-	//
-
+	if (!get_map_dimension(&g, lines, map_start))
+		error_exit(&g, "Map Error");
+	load_map(&g, lines, map_start);
 	if (!init_player(&g))
 	{
 		printf("Test\n");
