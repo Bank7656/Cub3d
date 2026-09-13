@@ -6,15 +6,35 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/08 22:47:29 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/08 22:49:35 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/13 15:15:31 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static void clear_map(char **map);
+static void	clear_textures(t_game *g);
 
 void	clear_game(t_game *g)
+{
+	clear_textures(g);
+	if (g->map)
+	{
+		clear_grid(g->map);
+		g->map = NULL;
+	}
+	if (g->lines)
+	{
+		clear_grid(g->lines);
+		g->lines = NULL;
+	}
+	if (g->mlx)
+	{
+		mlx_terminate(g->mlx);
+		g->mlx = NULL;
+	}
+}
+
+static void	clear_textures(t_game *g)
 {
 	int	i;
 
@@ -28,16 +48,9 @@ void	clear_game(t_game *g)
 		}
 		i++;
 	}
-	if (g->map)
-	{
-		clear_map(g->map);
-		g->map = NULL;
-	}
-	if (g->mlx)
-		mlx_terminate(g->mlx);
 }
 
-static void clear_map(char **map)
+void clear_grid(char **map)
 {
 	int	i;
 

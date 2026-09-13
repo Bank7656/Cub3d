@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 18:42:38 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/03 23:53:19 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/13 14:21:26 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	draw_column(t_game *g, t_ray *r, int x)
 
 	set_wall_bounds(r);
 	if (r->side == 0)
-		colour = 0xAA3333FF;
+		colour = 0xFFFFFFFF;
 	else
 		colour = 0x772222FF;
 	y = r->draw_start;

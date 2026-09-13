@@ -71,6 +71,7 @@ typedef struct s_ray {
 typedef struct s_game {
 	mlx_t       *mlx;
 	mlx_image_t *img;
+	char		**lines;
 	char        **map;
 	int         map_width;
 	int         map_height;
@@ -108,6 +109,7 @@ void	parse_line(t_game *g, char *line);
 void	set_texture(t_game *g, char *path, int side);
 
 void	clear_game(t_game *g);
+void	clear_grid(char **map);
 
 void	error_exit(t_game *g, const char *msg);
 
