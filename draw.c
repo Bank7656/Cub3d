@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 18:42:38 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/13 14:21:26 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/18 15:22:26 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,23 @@ void	draw_background(t_game *g)
 
 void	draw_column(t_game *g, t_ray *r, int x)
 {
-	int			y;
-	uint32_t	colour;
+	int				y;
+	t_tex			tex;
+	mlx_texture_t	*texture;
 
 	set_wall_bounds(r);
-	if (r->side == 0)
-		colour = 0xFFFFFFFF;
-	else
-		colour = 0x772222FF;
+	texture = get_texture_side(g, r);
+	tex.x = get_texture_x(g, r, texture);
+	tex.step = (double)texture->height / r->line_height;
+	tex.pos = (r->draw_start - HEIGHT / 2.0 + r->line_height / 2.0) * tex.step;
 	y = r->draw_start;
 	while (y <= r->draw_end)
 	{
-		mlx_put_pixel(g->img, x, y, colour);
+		tex.y = (int)tex.pos;
+		if (tex.y >= (int)texture->height)
+			tex.y = texture->height - 1;
+		tex.pos += tex.step;
+		mlx_put_pixel(g->img, x, y, get_texture_colour(texture, tex.x, tex.y));
 		y++;
 	}
 }

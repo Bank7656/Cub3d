@@ -16,6 +16,7 @@ MANDATORY_SRCS     := main.c \
 					  init.c \
 					  parse.c \
 					  set_texture.c \
+					  get_texture.c \
 					  draw.c \
 					  frame.c \
 					  moves.c \

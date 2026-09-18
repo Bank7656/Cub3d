@@ -52,6 +52,14 @@ typedef struct s_scene {
 	uint32_t        ceiling;
 } t_scene;
 
+typedef struct s_tex
+{
+	int		x;
+	int		y;
+	double	step;
+	double	pos;
+}	t_tex;
+
 typedef struct s_ray {
 	t_vec   dir;            /* this column's ray direction     */
 	t_vec   delta_dist;     /* ray length per grid line        */
@@ -88,7 +96,12 @@ void	set_colour(t_game *g, char *line, uint32_t *scene);
 
 
 void draw_background(t_game *g);
+// Don't forget to delete
 void draw_column(t_game *g, t_ray *r, int x);
+
+uint32_t    get_texture_colour(mlx_texture_t *t, int x, int y);
+mlx_texture_t   *get_texture_side(t_game *g, t_ray *r);
+int get_texture_x(t_game *g, t_ray *r, mlx_texture_t *t);
 
 void frame(void *param);
 void handle_input(t_game *g);

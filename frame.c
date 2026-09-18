@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 18:25:56 by thacharo          #+#    #+#             */
-/*   Updated: 2026/08/29 18:42:31 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/18 14:32:52 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	frame(void *param)
 
 static void	render_column(t_game *g, int x)
 {
-	t_ray	ray;
+	t_ray			ray;
 
 	init_ray(g, &ray, x);
 	run_dda(g, &ray);
