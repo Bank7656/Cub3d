@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/08 13:34:54 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/09 12:40:52 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/18 15:29:58 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	set_texture(t_game *g, char *path, int side)
 {
-	int i;
+	int	i;
 
 	while (ft_isspace(*path))
 		path++;

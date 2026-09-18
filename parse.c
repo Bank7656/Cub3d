@@ -6,13 +6,13 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/08 13:31:48 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/09 13:32:04 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/18 15:29:24 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static int	match_id(const char *line, const char *id); 
+static int	match_id(const char *line, const char *id);
 
 void	parse_line(t_game *g, char *line)
 {

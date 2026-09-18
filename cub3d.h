@@ -117,6 +117,18 @@ int     free_arr(char **arr, int n);
 
 char **read_file(int fd);
 
+int	is_valid_filename(char *name);
+int	is_all_values_parse(t_game *g);
+int	check_no_blank_lines(char **lines, int idx);
+int	is_valid_map_character(char c);
+int check_map_character(char **lines, int idx);
+
+int	map_checker(t_game *g);
+void	check_map_border(t_game *g, int map_idx);
+void	flood_fill(t_game *g, int x, int y);
+int	get_map_dimension(t_game *g, char **lines, int idx);
+void	load_map(t_game *g, char **lines, int idx);
+
 
 void	parse_line(t_game *g, char *line);
 void	set_texture(t_game *g, char *path, int side);

@@ -6,14 +6,14 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 23:46:07 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/09 14:09:20 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/18 15:27:56 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 static int	count_comma(char *line);
-static int  parse_component(char **line, int *output);
+static int	parse_component(char **line, int *output);
 
 void	set_colour(t_game *g, char *line, uint32_t *scene)
 {
@@ -46,7 +46,7 @@ void	set_colour(t_game *g, char *line, uint32_t *scene)
 
 static int	count_comma(char *line)
 {
-	int i;
+	int	i;
 	int	count;
 
 	i = 0;
@@ -54,13 +54,13 @@ static int	count_comma(char *line)
 	while (line[i] != '\0')
 	{
 		if (line[i] == ',')
-			count++; 
+			count++;
 		i++;
 	}
 	return (count);
 }
 
-static int  parse_component(char **line, int *output)
+static int	parse_component(char **line, int *output)
 {
 	int	value;
 

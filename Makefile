@@ -15,6 +15,8 @@ MANDATORY_SRCS     := main.c \
 					  colour.c \
 					  init.c \
 					  parse.c \
+					  parse_map.c \
+					  parse_map_utils.c \
 					  set_texture.c \
 					  get_texture.c \
 					  draw.c \

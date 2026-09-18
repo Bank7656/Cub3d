@@ -6,201 +6,47 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 18:39:21 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/13 15:15:31 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/18 15:49:28 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static char *g_map[] = {
-	"111111",
-	"100101",
-	"101001",
-	"101001",
-	"101001",
-	"101001",
-	"100001",
-	"1100N1",
-	"111111",
-	NULL
-};
-
-int	is_valid_filename(char *name)
-{
-	int	len;
-
-	len = ft_strlen(name);
-	if (len <= 4 || ft_strncmp(name + len - 4, ".cub", 4) != 0)
-		return (0);
-	return (1);
-}
-
-/* packed colour always has 0xFF alpha, so 0 means unset */
-int	is_all_values_parse(t_game *g)
+void	parse_cub_file(t_game *g, char *filename)
 {
 	int	i;
-	
-	i = 0;
-	while (i < 4)
+	int	fd;
+
+	if (!is_valid_filename(filename))
+		error_exit(g, "Need to use .cub file");
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+		error_exit(g, "Cannot open .cub file");
+	g->lines = read_file(fd);
+	if (!g->lines)
 	{
-		if (g->scene.texture[i] == NULL)
-			return (0);
-		i++;
+		close(fd);
+		error_exit(g, "Cannot open .cub file");
 	}
-	if (g->scene.floor == 0 || g->scene.ceiling == 0)
-		return (0);
-	return (1);
-}
-
-int	check_no_blank_lines(char **lines, int idx)
-{
-	while (lines[idx] != NULL)
-	{
-		if (lines[idx][0] == '\0')
-			return (0);
-		idx++;
-	}
-	return (1);
-}
-
-int	is_valid_map_character(char c)
-{
-	if (c == '0' || c == '1' || c == ' ')
-		return (1);
-	if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
-		return (1);
-	return (0);
-}
-
-int check_map_character(char **lines, int idx)
-{
-	int	i;
-
-	while (lines[idx] != NULL)
-	{
-		i = 0;
-		while (lines[idx][i] != '\0')
-		{
-			if (!is_valid_map_character(lines[idx][i]))
-				return (0);
-			i++;
-		}
-		idx++;
-	}
-	return (1);	
-}
-
-
-int	get_map_dimension(t_game *g, char **lines, int idx)
-{
-	int	len;
-	
-	g->map_width = 0;
-	g->map_height = 0;
-	while (lines[idx] != NULL)
-	{
-		len = ft_strlen(lines[idx]); 
-		if (len > g->map_width)
-			g->map_width = len;
-		g->map_height++;
-		idx++;
-	}
-	if (g->map_width == 0)
-		return (0);
-	return (1);
-}
-
-void	load_map(t_game *g, char **lines, int idx)
-{
-	int		i;
-	int		j;
-
-	i = 0;
-	g->map = (char **)ft_calloc(g->map_height + 1, sizeof(char *));
-	if (!g->map)
-		error_exit(g, "Cannot Malloc");
-	while (lines[idx] != NULL)
-	{
-		j = 0;
-		g->map[i] = (char *)ft_calloc(g->map_width + 1, sizeof(char));
-		if (!g->map[i])
-			error_exit(g, "Cannot Malloc");
-		while (lines[idx][j] != '\0')
-		{
-			g->map[i][j] = lines[idx][j];
-			j++;
-		}
-		ft_memset(g->map[i] + j, ' ', g->map_width - j);
-		i++;
-		idx++;
-	}
-	g->map[i] = NULL;
-}
-
-void	flood_fill(t_game *g, int x, int y)
-{
-	if (x < 0 || y < 0 || x >= g->map_width || y >= g->map_height)
-		error_exit(g, "Map is not enclosed with the wall");
-	if (g->map[y][x] == ' ')
-		error_exit(g, "Map is not enclosed with the wall");
-	if (g->map[y][x] == '1' || g->map[y][x] == 'v')
-		return ;
-	g->map[y][x] = 'v';
-	flood_fill(g, x + 1, y);
-	flood_fill(g, x - 1, y);
-	flood_fill(g, x, y + 1);
-	flood_fill(g, x, y - 1);
+	close(fd);
 }
 
 int	main(int argc, char **argv)
 {
 	t_game	g;
-	int		i;
+	int		map_start;
 
 	if (argc != 2)
 	{
 		printf("Usage: ./cub3d filename.cub\n");
 		return (EXIT_FAILURE);
 	}
-
 	ft_bzero(&g, sizeof(t_game));
-	if (!is_valid_filename(argv[1]))
-		error_exit(&g, "Need to use .cub file");
-	int fd = open(argv[1], O_RDONLY);
-	if (fd < 0)
-		error_exit(&g, "Cannot open .cub file");
-	g.lines = read_file(fd);
-	if (!g.lines)
-		error_exit(&g, strerror(errno));
-	
-	i = 0;
-	while (g.lines[i] != NULL)
-	{
-		if (g.lines[i][0] == '\0')
-		{
-			i++;
-			continue;		
-		}
-		if (is_all_values_parse(&g))
-			break;
-		parse_line(&g, g.lines[i]);
-		i++;
-	}
-	int	map_start = i;
-	if (!check_no_blank_lines(g.lines, map_start))
-		error_exit(&g, "Map incomplete");
-	if (!check_map_character(g.lines, map_start))
-		error_exit(&g, "Invalid character");
-	if (!get_map_dimension(&g, g.lines, map_start))
-		error_exit(&g, "Map Error");
+	parse_cub_file(&g, argv[1]);
+	map_start = map_checker(&g);
 	load_map(&g, g.lines, map_start);
 	if (!init_player(&g))
 		error_exit(&g, "Cannot find player on a map");
-	flood_fill(&g, (int)g.player.pos.x, (int)g.player.pos.y);
-	clear_grid(g.map);
-	g.map = NULL;
-	load_map(&g, g.lines, map_start);
-	
 	g.mlx = mlx_init(WIDTH, HEIGHT, "cub3D", false);
 	if (!g.mlx)
 		error_exit(&g, mlx_strerror(mlx_errno));
@@ -211,7 +57,6 @@ int	main(int argc, char **argv)
 	mlx_key_hook(g.mlx, on_key, &g);
 	mlx_loop(g.mlx);
 	mlx_terminate(g.mlx);
-	close(fd);
 	return (EXIT_SUCCESS);
 }
 

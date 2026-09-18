@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/08 22:47:29 by thacharo          #+#    #+#             */
-/*   Updated: 2026/09/18 14:06:08 by thacharo         ###   ########.fr       */
+/*   Updated: 2026/09/18 15:27:13 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	clear_game(t_game *g)
 	}
 	if (g->lines)
 	{
-	clear_grid(g->lines);
+		clear_grid(g->lines);
 		g->lines = NULL;
 	}
 	if (g->mlx)
@@ -50,7 +50,7 @@ static void	clear_textures(t_game *g)
 	}
 }
 
-void clear_grid(char **map)
+void	clear_grid(char **map)
 {
 	int	i;
 
